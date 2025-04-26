@@ -1,15 +1,15 @@
-📝 Описание проекта | Project Description
+# 📝 Описание проекта | Project Description
 
-Русский:
+### Русский:
 
 DayZ Rental Bot — это Discord-бот для управления арендой автомобилей на сервере DayZ. Игроки могут арендовать транспорт через Discord, оплачивая аренду каждые 10 минут. Бот автоматически создаёт файлы машин в виртуальном гараже, списывает деньги с банковского счёта игрока и удаляет машину в случае нехватки средств.
 
-English:
+### English:
 
 DayZ Rental Bot is a Discord bot for managing vehicle rentals on a DayZ server. Players can rent vehicles through Discord, with rental fees deducted every 10 minutes. The bot automatically creates vehicle files in a virtual garage, deducts money from the player's bank account, and removes the vehicle if funds run out.
 
 
-РУССКИЙ:
+#РУССКИЙ:
 
 # 📖 Гайд по настройке и использованию DayZ Rental Bot by Polyagg
 
@@ -128,18 +128,16 @@ python bot.py
 
 Удачной аренды! 🚗💨
 
-ENGILISH:
+# ENGILISH:
 
-📖 Guide to Setting Up and Using DayZ Rental Bot by Polyagg
+# 📖 Guide to Setting Up and Using DayZ Rental Bot by Polyagg
 
-⚙️ Required Mods
+## ⚙️ Required Mods
+- RF Garage
+- Advanced Banking V2
 
-RF Garage
-
-Advanced Banking V2
-
-📂 Project Structure
-
+## 📂 Project Structure
+```
 dayz_rental_bot/
 ├── bot.py                        # Main Discord bot script
 ├── cars_config.json              # List of vehicles available for rent
@@ -147,25 +145,25 @@ dayz_rental_bot/
 │   ├── BMW_E28.json
 │   ├── Mercedes_Sprinter.json
 │   └── ...
+```
 
-⚙️ Installation and Setup
+## ⚙️ Installation and Setup
 
-Install Python (if not installed yet), then install the required dependency:
-
+1. Install Python (if not installed yet), then install the required dependency:
+```bash
 pip install discord.py
+```
 
-In bot.py:
+2. In `bot.py`:
+- Replace `YOUR_BOT_TOKEN` with your Discord bot token.
+- Set your alert channel ID in `ALERT_CHANNEL_ID`.
 
-Replace YOUR_BOT_TOKEN with your Discord bot token.
+3. Check the BANK_PATH and GARAGE_PATH variables to match your actual DayZ server directories.
 
-Set your alert channel ID in ALERT_CHANNEL_ID.
+## 📦 Configuring Vehicles
 
-Check the BANK_PATH and GARAGE_PATH variables to match your actual DayZ server directories.
-
-📦 Configuring Vehicles
-
-In cars_config.json, add the vehicles in the following format:
-
+In `cars_config.json`, add the vehicles in the following format:
+```json
 [
   {
     "classname": "BMW_E28",    "This should match the vehicle classname and template filename."
@@ -178,72 +176,71 @@ In cars_config.json, add the vehicles in the following format:
     "price": 500
   }
 ]
+```
 
-In the vehicles_templates/ folder, create a JSON template file for each vehicle named <classname>.json.
+In the `vehicles_templates/` folder, create a JSON template file for each vehicle named `<classname>.json`.
 
-Important: The template must include ownerId and uuid fields, which the bot will automatically replace during rental.
+**Important:** The template must include `ownerId` and `uuid` fields, which the bot will automatically replace during rental.
 
-🚀 How to Use
+## 🚀 How to Use
 
-Launch the bot:
+1. Launch the bot:
 Open PowerShell (Win+R -> powershell)
 
 Navigate to the bot's folder:
-
+```bash
 cd path_to_your_bot_folder
-
+```
 Then run:
-
+```bash
 python bot.py
+```
 
-In Discord, use the rental command:
-
+2. In Discord, use the rental command:
+```
 !rent <SteamID>
-
+```
 Example:
-
+```
 !rent 76561198012345678
+```
 
-Select a vehicle via the interactive buttons.
+3. Select a vehicle via the interactive buttons.
 
-The bot will create the rented vehicle in the player's garage and deduct rental fees every 10 minutes.
+4. The bot will create the rented vehicle in the player's garage and deduct rental fees every 10 minutes.
 
-To return a vehicle:
-
+5. To return a vehicle:
+```
 !return <SteamID>
-
+```
 Example:
-
+```
 !return 76561198012345678
+```
 
-🔥 Features
+## 🔥 Features
 
-If the player doesn't have enough money, the rental won't start.
+- If the player doesn't have enough money, the rental won't start.
+- If funds run out during rental, the bot will remove the vehicle and send an alert.
+- Vehicle selection buttons remain active indefinitely.
+- Supports multiple simultaneous rentals.
 
-If funds run out during rental, the bot will remove the vehicle and send an alert.
+## 🚨 Potential Issues
 
-Vehicle selection buttons remain active indefinitely.
+- **Buttons don't work:** The bot was restarted. Just use `!rent` again.
+- **Missing vehicle template:** Vehicles without a matching template won't appear in the rental list.
 
-Supports multiple simultaneous rentals.
+---
 
-🚨 Potential Issues
+# ✅ Quick Commands Table
 
-Buttons don't work: The bot was restarted. Just use !rent again.
+| Action               | Command                  |
+|----------------------|---------------------------|
+| Rent a vehicle        | `!rent <SteamID>`         |
+| Return a vehicle      | `!return <SteamID>`       |
 
-Missing vehicle template: Vehicles without a matching template won't appear in the rental list.
-
-✅ Quick Commands Table
-
-Action
-
-Command
-
-Rent a vehicle
-
-!rent <SteamID>
-
-Return a vehicle
-
-!return <SteamID>
+---
 
 Happy renting! 🚗💨
+
+

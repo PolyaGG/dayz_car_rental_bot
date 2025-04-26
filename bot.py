@@ -147,4 +147,4 @@ async def rent(ctx: commands.Context, steam_id: str):
     view = CarSelectView(ctx.author.id)
     await ctx.reply(f"Ваш баланс: {balance}₽. Цена аренды указана за 10 минут. Выберите машину:", view=view)
 
-bot.run("BOT_TOKEN_HERE") # <-- Токен вашего дискорд бота
+bot.run("YOUR_BOT_TOKEN") # <-- Токен вашего дискорд бота

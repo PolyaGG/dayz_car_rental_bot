@@ -1,3 +1,13 @@
+📝 Описание проекта
+
+Русский:
+
+DayZ Rental Bot — это Discord-бот для управления арендой автомобилей на сервере DayZ. Игроки могут арендовать транспорт через Discord, оплачивая аренду каждые 10 минут. Бот автоматически создаёт файлы машин в виртуальном гараже, списывает деньги с банковского счёта игрока и удаляет машину в случае нехватки средств.
+
+English:
+
+DayZ Rental Bot is a Discord bot for managing vehicle rentals on a DayZ server. Players can rent vehicles through Discord, with rental fees deducted every 10 minutes. The bot automatically creates vehicle files in a virtual garage, deducts money from the player's bank account, and removes the vehicle if funds run out.
+
 # 📖 Гайд по настройке и использованию DayZ Rental Bot by Polyagg
 
 ## ⚙️ Требуемые моды

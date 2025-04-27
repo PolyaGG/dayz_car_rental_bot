@@ -1,3 +1,8 @@
+#THIS VERSION CANT SAVE USER'S STEAM ID
+#IF YOU WANT FULL FUNCTIONALITY USE bot_en_version.py instead
+#Эта версия бота не поддерживает сохранение SteamID
+#Если нужен полный функционал используй bot_ru_version.py
+
 import os
 import json
 import asyncio

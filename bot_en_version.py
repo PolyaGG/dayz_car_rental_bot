@@ -1,3 +1,4 @@
+#English version of the bot, all settings are indicated in comments. All questions and help with installation - Discord @polyagg
 import os
 import json
 import asyncio

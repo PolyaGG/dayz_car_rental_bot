@@ -14,11 +14,12 @@ VEHICLE_TEMPLATES_PATH = "vehicles_templates"
 ALERT_CHANNEL_ID = 111111111111  # <-- сюда вставь ID канала для оповещений
 
 
+# Инициализация бота
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-
+# Загружаем машины и фильтруем по наличию шаблонов
 try:
     with open(CARS_CONFIG_FILE, "r", encoding="utf-8") as f:
         cars_raw = json.load(f)
@@ -91,7 +92,7 @@ async def rent(ctx: commands.Context, steam_id: str):
 
     class CarSelectView(discord.ui.View):
         def __init__(self, author_id):
-            super().__init__(timeout=120)
+            super().__init__(timeout=None)  # кнопки теперь бессрочные
             self.author_id = author_id
             for car in CARS_LIST:
                 button = discord.ui.Button(label=f"{car['name']} - {car['price']}₽", style=discord.ButtonStyle.primary, custom_id=car['classname'])
@@ -100,15 +101,15 @@ async def rent(ctx: commands.Context, steam_id: str):
 
         def make_callback(self, car):
             async def callback(interaction: discord.Interaction):
-                if interaction.user.id != self.author_id:
-                    await interaction.response.send_message("Это не ваша сессия.", ephemeral=True)
-                    return
-
-                car_class = car["classname"]
-                car_name = car["name"]
-                car_price = car["price"]
-                
                 try:
+                    if interaction.user.id != self.author_id:
+                        await interaction.response.send_message("Это не ваша сессия.", ephemeral=True)
+                        return
+
+                    car_class = car["classname"]
+                    car_name = car["name"]
+                    car_price = car["price"]
+
                     with open(account_file, "r+", encoding="utf-8") as f:
                         data = json.load(f)
                         if data.get("m_OwnedCurrency", 0) < car_price:
@@ -118,11 +119,7 @@ async def rent(ctx: commands.Context, steam_id: str):
                         f.seek(0)
                         json.dump(data, f, ensure_ascii=False, indent=4)
                         f.truncate()
-                except Exception:
-                    await interaction.response.send_message("Ошибка списания средств.", ephemeral=True)
-                    return
 
-                try:
                     garage_dir = os.path.join(GARAGE_PATH, steam_id, "garage")
                     os.makedirs(garage_dir, exist_ok=True)
                     template_path = os.path.join(VEHICLE_TEMPLATES_PATH, f"{car_class}.json")
@@ -134,17 +131,39 @@ async def rent(ctx: commands.Context, steam_id: str):
                     car_dest_path = os.path.join(garage_dir, f"{car_uuid}.json")
                     with open(car_dest_path, "w", encoding="utf-8") as f:
                         json.dump(car_data, f, ensure_ascii=False, indent=4)
+
+                    active_rentals[steam_id] = {"user": ctx.author, "price": car_price, "uuid": car_uuid, "task": None}
+                    task = asyncio.create_task(rent_deduct_loop(steam_id, car_price, ctx.author))
+                    active_rentals[steam_id]["task"] = task
+
+                    await interaction.response.edit_message(content=f"✅ Вы арендовали {car_name}!", view=None)
                 except Exception as e:
-                    await interaction.response.send_message(f"Ошибка создания машины: {e}", ephemeral=True)
-                    return
-
-                active_rentals[steam_id] = {"user": ctx.author, "price": car_price, "uuid": car_uuid, "task": None}
-                task = asyncio.create_task(rent_deduct_loop(steam_id, car_price, ctx.author))
-                active_rentals[steam_id]["task"] = task
-
-                await interaction.response.edit_message(content=f"✅ Вы арендовали {car_name}! Получите автомобиль в ближайшем паркомате. Для возврата машины - поставьте ее в гараж и отправьте команду !return SteamID", view=None)
+                    print(f"[ERROR] Ошибка при обработке кнопки: {e}")
+                    try:
+                        await interaction.response.send_message("Произошла ошибка при аренде.", ephemeral=True)
+                    except:
+                        pass
+            return callback
 
     view = CarSelectView(ctx.author.id)
-    await ctx.reply(f"Ваш баланс: {balance}₽. Цена аренды указана за 10 минут. Выберите машину:", view=view)
+    await ctx.reply(f"Ваш баланс: {balance}₽. Выберите машину:", view=view)
+
+@bot.command(name="return")
+async def return_car(ctx: commands.Context, steam_id: str):
+    rental = active_rentals.get(steam_id)
+    if not rental:
+        await ctx.reply("У вас нет активной аренды.")
+        return
+
+    car_uuid = rental.get("uuid")
+    car_file = os.path.join(GARAGE_PATH, steam_id, "garage", f"{car_uuid}.json")
+    if os.path.isfile(car_file):
+        os.remove(car_file)
+        if rental.get("task"):
+            rental["task"].cancel()
+        active_rentals.pop(steam_id, None)
+        await ctx.reply("✅ Машина успешно возвращена. Спасибо!")
+    else:
+        await ctx.reply("⚠️ Машина не найдена в гараже. Возврат невозможен.")
 
 bot.run("YOUR_BOT_TOKEN") # <-- Токен вашего дискорд бота

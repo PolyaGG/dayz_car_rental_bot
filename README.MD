@@ -100,6 +100,11 @@ python bot.py
 !возврат
 ```
 
+В коде указаны дополнительные параметры для кастомизации бота!
+```
+# Комментарии выглядят вот так
+```
+
 ## 🔥 Особенности
 
 - Если у игрока недостаточно денег для аренды — аренда не начнётся.
@@ -210,6 +215,12 @@ If users Steam64ID not presented in user_data bot will ask user for it in PM.
 5. To return a vehicle:
 ```
 !return
+```
+
+
+The code specifies additional parameters for customizing the bot!
+```
+# Comments look like this
 ```
 
 ## 🔥 Features

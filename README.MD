@@ -24,6 +24,7 @@ DayZ Rental Bot is a Discord bot for managing vehicle rentals on a DayZ server. 
 dayz_rental_bot/
 ├── bot.py                        # Основной скрипт Discord-бота
 ├── cars_config.json              # Список машин для аренды
+├── user_data.json                # Список пользователей
 ├── vehicles_templates/           # Шаблоны машин
 │   ├── BMW_E28.json
 │   ├── Mercedes_Sprinter.json
@@ -39,7 +40,7 @@ pip install discord.py
 
 2. В файле `bot.py`:
 - Замени `YOUR_BOT_TOKEN` на токен своего Discord-бота.
-- Укажи ID канала для алертов в `ALERT_CHANNEL_ID`.
+- Укажи ID канала для стартового сообщения в `ALERT_CHANNEL_ID`.
 
 3. Проверь пути к папкам BANK_PATH и GARAGE_PATH, чтобы они совпадали с реальными на сервере DayZ.
 
@@ -81,13 +82,13 @@ cd путь_к_папке_с_ботом
 python bot.py
 ```
 
-2. В Discord используй команду аренды:
+2. В Discord в ЛС бота или прямо на сервере используй команду аренды:
 ```
-!rent <SteamID>
+!аренда
 ```
-Пример:
+Примечание:
 ```
-!rent 76561198012345678
+При первом использовании бот запросит у пользователя SteamID через ЛС.
 ```
 
 3. Выбери машину через кнопки.
@@ -96,11 +97,7 @@ python bot.py
 
 5. Чтобы вернуть машину:
 ```
-!return <SteamID>
-```
-Пример:
-```
-!return 76561198012345678
+!возврат
 ```
 
 ## 🔥 Особенности
@@ -121,8 +118,8 @@ python bot.py
 
 | Действие            | Команда                  |
 |---------------------|---------------------------|
-| Арендовать машину    | `!rent <SteamID>`         |
-| Вернуть машину       | `!return <SteamID>`       |
+| Арендовать машину    | `!аренда`               |
+| Вернуть машину       | `!возврат`              |
 
 ---
 
@@ -141,6 +138,7 @@ python bot.py
 dayz_rental_bot/
 ├── bot.py                        # Main Discord bot script
 ├── cars_config.json              # List of vehicles available for rent
+├── user_data.json                # List of bot users steamID
 ├── vehicles_templates/           # Vehicle templates
 │   ├── BMW_E28.json
 │   ├── Mercedes_Sprinter.json
@@ -198,11 +196,11 @@ python bot.py
 
 2. In Discord, use the rental command:
 ```
-!rent <SteamID>
+!rent
 ```
-Example:
+Note:
 ```
-!rent 76561198012345678
+If users Steam64ID not presented in user_data bot will ask user for it in PM.
 ```
 
 3. Select a vehicle via the interactive buttons.
@@ -211,11 +209,7 @@ Example:
 
 5. To return a vehicle:
 ```
-!return <SteamID>
-```
-Example:
-```
-!return 76561198012345678
+!return
 ```
 
 ## 🔥 Features
@@ -236,8 +230,8 @@ Example:
 
 | Action               | Command                  |
 |----------------------|---------------------------|
-| Rent a vehicle        | `!rent <SteamID>`         |
-| Return a vehicle      | `!return <SteamID>`       |
+| Rent a vehicle        | `!rent`                 |
+| Return a vehicle      | `!return`               |
 
 ---
 

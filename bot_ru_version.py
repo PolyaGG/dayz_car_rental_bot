@@ -1,3 +1,4 @@
+#Русская версия бота, все настройки указаны комментариями. Все вопросы и помощь с установкой - Discord @polyagg
 import os
 import json
 import asyncio
